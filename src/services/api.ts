@@ -4,6 +4,9 @@ import { Incident, ApiResponse } from '../types';
 const api = axios.create({
   baseURL: 'https://jsonplaceholder.typicode.com',
   timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
 });
 
 export const submitIncident = async (data: Incident): Promise<ApiResponse<Incident>> => {
