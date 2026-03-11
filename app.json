@@ -1,0 +1,50 @@
+{
+  "expo": {
+    "name": "S-Signalement-Municipal",
+    "slug": "S-Signalement-Municipal",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "L'application a besoin d'accéder à la caméra pour photographier les incidents."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "L'application a besoin de votre position pour géolocaliser les incidents."
+        }
+      ],
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "L'application a besoin d'accéder au calendrier pour planifier les suivis d'incidents."
+        }
+      ]
+    ]
+  }
+}
