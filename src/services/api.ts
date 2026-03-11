@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Incident, ApiResponse } from '../types';
 
 const api = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com', 
+  baseURL: 'https://jsonplaceholder.typicode.com',
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -12,9 +12,15 @@ const api = axios.create({
 export const submitIncident = async (data: Incident): Promise<ApiResponse<Incident>> => {
   try {
     const response = await api.post<Incident>('/posts', data);
-    return { success: true, data: response.data };
+    return {
+      success: true,
+      data: response.data,
+    };
   } catch (error: any) {
-    return { success: false, error: error.message || 'Erreur lors de l\'envoi du signalement' };
+    return {
+      success: false,
+      error: error.message || 'Erreur lors de l\'envoi du signalement',
+    };
   }
 };
 
