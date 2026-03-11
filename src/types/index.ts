@@ -4,17 +4,15 @@ export interface Coordinates {
 }
 
 export interface Incident {
-  id: string;
-  title: string;
+  id?: string;
   description: string;
+  photoUri: string;
   location: Coordinates;
-  imageUrl?: string;
-  date: Date | string;
-  status: 'pending' | 'in_progress' | 'resolved';
+  timestamp: number;
 }
 
 export interface ApiResponse<T> {
-  data: T;
   success: boolean;
-  message?: string;
+  data?: T;
+  error?: string;
 }
