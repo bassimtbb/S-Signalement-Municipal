@@ -1,14 +1,17 @@
-import { submitIncident } from './api';
+import { submitIncident } from './api.js';
+import { Incident } from '../types';
 
-const testAPI = async () => {
-  const result = await submitIncident({
-    description: 'Test Incident',
-    photoUri: 'https://example.com/photo.jpg',
-    location: { latitude: 48.8566, longitude: 2.3522 },
-    timestamp: Date.now(),
-  });
-
-  console.log('Résultat API :', result);
+const testIncident: Incident = {
+  description: 'Test signalement',
+  photoUri: 'https://via.placeholder.com/150', 
+  location: { latitude: 48.8566, longitude: 2.3522 }, 
+  timestamp: Date.now(),
 };
 
-testAPI();
+async function runTest() {
+  console.log('Envoi du signalement test...');
+  const response = await submitIncident(testIncident);
+  console.log('Résultat :', response);
+}
+
+runTest();
