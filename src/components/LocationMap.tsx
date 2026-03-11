@@ -1,52 +1,63 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { Coordinates } from '../types';
 
 interface LocationMapProps {
-  onLocationFix: (coords: Coordinates) => void;
+  onLocationFound: (coords: Coordinates) => void;
 }
 
-const LocationMap: React.FC<LocationMapProps> = ({ onLocationFix }) => {
+const LocationMap: React.FC<LocationMapProps> = ({ onLocationFound }) => {
   const [location, setLocation] = useState<Coordinates | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    (async () => {
+    getLocation();
+  }, []);
+
+  const getLocation = async () => {
+    try {
       let { status } = await Location.requestForegroundPermissionsAsync();
+
       if (status !== 'granted') {
-        setErrorMsg('L\'application a besoin de votre position pour géolocaliser les incidents.');
+        setErrorMsg("Permission de localisation refusée.");
         return;
       }
 
-      try {
-        let currentLocation = await Location.getCurrentPositionAsync({});
-        const coords = {
-          latitude: currentLocation.coords.latitude,
-          longitude: currentLocation.coords.longitude,
-        };
-        setLocation(coords);
-        onLocationFix(coords);
-      } catch (error) {
-        setErrorMsg('Impossible de récupérer la position.');
-      }
-    })();
-  }, []);
+      
+      let currentLocation = await Location.getCurrentPositionAsync({});
 
+      const coords: Coordinates = {
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+      };
+
+      setLocation(coords);
+
+      
+      onLocationFound(coords);
+
+    } catch (error) {
+      setErrorMsg("Impossible de récupérer la position.");
+    }
+  };
+
+  
   if (errorMsg) {
     return (
       <View style={styles.center}>
-        <Text style={styles.errorText}>{errorMsg}</Text>
+        <Text style={styles.error}>{errorMsg}</Text>
       </View>
     );
   }
 
+  
   if (!location) {
     return (
       <View style={styles.center}>
         <ActivityIndicator size="large" color="#007AFF" />
-        <Text style={styles.loadingText}>Recherche de votre position...</Text>
+        <Text>Recherche de votre position...</Text>
       </View>
     );
   }
@@ -67,7 +78,7 @@ const LocationMap: React.FC<LocationMapProps> = ({ onLocationFix }) => {
             latitude: location.latitude,
             longitude: location.longitude,
           }}
-          title="Lieu de l'incident"
+          title="Votre position"
         />
       </MapView>
     </View>
@@ -76,8 +87,9 @@ const LocationMap: React.FC<LocationMapProps> = ({ onLocationFix }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    borderRadius: 16,
+    height: 250,
+    width: '100%',
+    borderRadius: 10,
     overflow: 'hidden',
   },
   map: {
@@ -85,20 +97,13 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   center: {
-    flex: 1,
+    height: 250,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    borderRadius: 16,
   },
-  errorText: {
-    color: '#ff3b30',
+  error: {
+    color: 'red',
     textAlign: 'center',
-    padding: 20,
-  },
-  loadingText: {
-    marginTop: 10,
-    color: '#666',
   },
 });
 
